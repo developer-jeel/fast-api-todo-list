@@ -15,5 +15,6 @@ def show_todos():
     return todos
 
 @app.post('/')
-def hello():
-    return {"message" : "hi world"}
+def create_todos(todo : ToDo):
+    todos.append(todo)
+    return {"message" : "todo created sucessfully"}
