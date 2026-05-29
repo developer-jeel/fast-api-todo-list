@@ -11,8 +11,8 @@ class ToDo(BaseModel):
 todos = []
 
 @app.get('/')
-def home():
-    return {"message" : "hello world"}
+def show_todos():
+    return todos
 
 @app.post('/')
 def hello():
