@@ -21,4 +21,5 @@ def create_todos(todo : ToDo):
 
 @app.put('/{todo_id}')
 def update_todos(todo_id:int , updated_todo : ToDo):
+    for i,t in enumerate(todos):
     return {"message" : "todo updated sucessfully"}
