@@ -20,4 +20,5 @@ def create_todos(todo : ToDo):
     return {"message" : "todo created sucessfully"}
 
 @app.put('/{todo_id}')
-def update_todos()
+def update_todos():
+    return {"message" : "todo updated sucessfully"}
