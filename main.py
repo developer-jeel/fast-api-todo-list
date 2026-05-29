@@ -18,3 +18,5 @@ def show_todos():
 def create_todos(todo : ToDo):
     todos.append(todo)
     return {"message" : "todo created sucessfully"}
+
+@app.post('/')
