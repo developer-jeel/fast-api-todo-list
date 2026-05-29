@@ -19,4 +19,4 @@ def create_todos(todo : ToDo):
     todos.append(todo)
     return {"message" : "todo created sucessfully"}
 
-@app.post('/')
+@app.put('/')
