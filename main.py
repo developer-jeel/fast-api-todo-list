@@ -26,3 +26,9 @@ def update_todos(todo_id:int , updated_todo : ToDo):
             todos[i] = updated_todo
             return {"message" : "todo updated sucessfully"}
     return {"message" : "feild todo"}
+
+@app.delete('/{todo_id}')
+def delete_todos(todo_id:int):
+    global todos
+    todos = [todo for todo in todos if todo.id != todo_id ]
+    return {"message" : " todo deleted"}
