@@ -23,6 +23,6 @@ def create_todos(todo : ToDo):
 def update_todos(todo_id:int , updated_todo : ToDo):
     for i , todo in enumerate(todos):
         if todo.id == todo_id:
-            todo[i] = updated_todo
+            todos[i] = updated_todo
             return {"message" : "todo updated sucessfully"}
     return {"message" : "feild todo"}
