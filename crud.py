@@ -10,6 +10,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
 router = APIRouter()
+
+templates = Jinja2Templates(directory='templates')
 class ToDoCreate(BaseModel):
     title : str
     description : Optional[str]
