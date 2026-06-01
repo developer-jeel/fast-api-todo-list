@@ -30,7 +30,9 @@ def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
 
 @router.put('/{todo_id}',response_model=ToDoResponse)
 def update_todos(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
+    todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
     
+
 
 # @router.delete('/{todo_id}')
 # def delete_todos(todo_id:int):
