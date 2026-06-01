@@ -9,16 +9,16 @@ class ToDo(BaseModel):
 
 todos = []
 
-@app.get('/')
+@router.get('/')
 def show_todos():
     return todos
 
-@app.post('/')
+@router.post('/')
 def create_todos(todo : ToDo):
     todos.append(todo)
     return {"message" : "todo created sucessfully"}
 
-@app.put('/{todo_id}')
+@router.put('/{todo_id}')
 def update_todos(todo_id:int , updated_todo : ToDo):
     for i , todo in enumerate(todos):
         if todo.id == todo_id:
@@ -26,7 +26,7 @@ def update_todos(todo_id:int , updated_todo : ToDo):
             return {"message" : "todo updated sucessfully"}
     return {"message" : "feild todo"}
 
-@app.delete('/{todo_id}')
+@router.delete('/{todo_id}')
 def delete_todos(todo_id:int):
     global todos
     todos = [todo for todo in todos if todo.id != todo_id ]
