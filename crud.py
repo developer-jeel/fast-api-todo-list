@@ -8,7 +8,7 @@ from typing import List,Optional
 router = APIRouter()
 class ToDoCreate(BaseModel):
     title : str
-    description : str
+    description : Optional[str]
     done : bool
 
 class ToDoResponse(ToDoCreate):
