@@ -6,6 +6,7 @@ class ToDo(BaseModel):
     id : int
     name : str
     description : str
+    done = bool
 
 todos = []
 
