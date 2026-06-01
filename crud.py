@@ -1,5 +1,9 @@
 from fastapi import APIRouter,Depends,HTTPException
 from pydantic import BaseModel
+from database import *
+from sqlalchemy.orm import Session
+from models import ToDo
+from typing import List
 
 router = APIRouter()
 class ToDoCreate(BaseModel):
@@ -17,12 +21,12 @@ def show_todos():
     return todos
 
 @router.post('/',response_model=ToDoResponse)
-def create_todos(todo : ToDoCreate):
+def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
     todos.append(todo)
     return {"message" : "todo created sucessfully"}
 
 @router.put('/{todo_id}')
-def update_todos(todo_id:int , updated_todo : ToDo):
+def update_todos(todo_id:int , updated_todo : ToDoCreate):
     for i , todo in enumerate(todos):
         if todo.id == todo_id:
             todos[i] = updated_todo
