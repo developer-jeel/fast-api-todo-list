@@ -22,8 +22,10 @@ def show_todos():
 
 @router.post('/',response_model=ToDoResponse)
 def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
-    todos.append(todo)
-    return {"message" : "todo created sucessfully"}
+    new_todo = ToDo(title = todo.title,description = todo.description,done = todo.done)
+    db.add(new_todo)
+    db.commit()
+    return new_todo
 
 @router.put('/{todo_id}')
 def update_todos(todo_id:int , updated_todo : ToDoCreate):
