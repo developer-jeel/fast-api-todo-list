@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from models import ToDo
 from typing import List,Optional
 
-from fastapi import requests , Form , Request
+from fastapi import Form , Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
@@ -25,7 +25,7 @@ todos = []
 @router.get('/',response_model=List[ToDoResponse])
 def show_todos(request : Request ,db : Session = Depends(get_db)):
     todos =  db.query(ToDo).all()
-    return templates.TemplateResponse('todo_list.html',{'request':request ,'todos':todos})
+    return templates.TemplateResponse(request, name='todo_list.html', context={"todos":todos})
 
 @router.post('/',response_model=ToDoResponse)
 def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
