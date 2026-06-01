@@ -28,7 +28,9 @@ def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
     db.refresh(new_todo)
     return new_todo
 
-
+@router.put('/{todo_id}',response_model=ToDoResponse)
+def update_todos(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
+    
 
 # @router.delete('/{todo_id}')
 # def delete_todos(todo_id:int):
