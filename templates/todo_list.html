@@ -1,154 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Todo List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthy Todo — Jinja Template</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
+        /* ----- EARTHY THEME (exactly from your variables) ----- */
+        :root {
+            --cream:    #F5F0E8;
+            --parchment:#EDE5D8;
+            --linen:    #E0D5C5;
+            --warm-mid: #C4B49A;
+            --taupe:    #9E8E78;
+            --umber:    #6B5B45;
+            --espresso: #3D2E1E;
+            --ink:      #1E1510;
+            --gold:     #B89A6A;
+            --gold-lt:  #D4B896;
+            --sand:     #D6C9B5;
+            --white:    #FAF7F2;
+            --done-bg:  rgba(95,110,85,0.12);
+            --done-txt: #4A5C3A;
+            --pend-bg:  rgba(160,120,60,0.12);
+            --pend-txt: #7A5A20;
+            --radius:   14px;
+            --radius-sm:8px;
+            --shadow: 0 10px 20px rgba(0,0,0,0.05);
+            --transition: all 0.2s ease-out;
+        }
 
-body{
-    background:#f4f7fc;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-}
+        body {
+            background: linear-gradient(135deg, var(--cream), var(--parchment));
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            margin: 0;
+        }
 
-.container{
-    width:90%;
-    max-width:900px;
-    background:#fff;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
-}
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.8rem;
+            transition: var(--transition);
+            border: 1px solid rgba(180,150,110,0.2);
+        }
 
-h1{
-    text-align:center;
-    margin-bottom:20px;
-    color:#333;
-}
+        /* header + new task link (styled as button) */
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--espresso);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        h1::before {
+            content: "";
+            font-size: 2rem;
+        }
 
-th{
-    background:#4f46e5;
-    color:white;
-    padding:15px;
-}
+        .btn-new {
+            background: var(--espresso);
+            padding: 0.7rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .btn-new:hover {
+            background: var(--umber);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+        }
+        .btn-new:active {
+            transform: translateY(1px);
+        }
 
-td{
-    padding:15px;
-    text-align:center;
-    border-bottom:1px solid #ddd;
-}
+        /* table styles */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+        }
 
-tr:hover{
-    background:#f8f9ff;
-}
+        .todo-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
 
-.completed{
-    color:green;
-    font-weight:bold;
-}
+        .todo-table th {
+            background: var(--linen);
+            color: var(--espresso);
+            font-weight: 600;
+            padding: 1rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-.pending{
-    color:red;
-    font-weight:bold;
-}
+        .todo-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--sand);
+            background: var(--white);
+            transition: background 0.2s;
+            vertical-align: middle;
+        }
 
-.btn{
-    padding:8px 15px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    color:white;
-    text-decoration:none;
-    margin:2px;
-}
+        /* row hover animation */
+        .todo-table tbody tr {
+            transition: transform 0.1s, background 0.2s;
+        }
+        .todo-table tbody tr:hover td {
+            background: var(--parchment);
+        }
 
-.edit{
-    background:#f59e0b;
-}
+        /* status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .status-completed {
+            background: var(--done-bg);
+            color: var(--done-txt);
+            border-left: 2px solid #5F6E55;
+        }
+        .status-pending {
+            background: var(--pend-bg);
+            color: var(--pend-txt);
+            border-left: 2px solid #C2A156;
+        }
 
-.edit:hover{
-    background:#d97706;
-}
+        /* action buttons / links styled as buttons */
+        .action-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.4rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .btn-edit {
+            background: rgba(184,154,106,0.15);
+            color: var(--umber);
+            border-color: var(--gold-lt);
+        }
+        .btn-edit:hover {
+            background: var(--gold);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .btn-toggle {
+            background: rgba(107,91,69,0.1);
+            color: var(--taupe);
+            border-color: var(--warm-mid);
+        }
+        .btn-toggle:hover {
+            background: var(--warm-mid);
+            color: var(--ink);
+            transform: translateY(-2px);
+        }
+        .btn-delete {
+            background: rgba(200,80,60,0.08);
+            color: #b1624b;
+            border-color: #e2bcb0;
+        }
+        .btn-delete:hover {
+            background: #dc7f64;
+            color: white;
+            transform: translateY(-2px);
+        }
 
-.delete{
-    background:#ef4444;
-}
+        /* inline delete form */
+        .inline-form {
+            display: inline;
+        }
+        .inline-form button {
+            background: none;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
 
-.delete:hover{
-    background:#dc2626;
-}
-</style>
+        /* stats footer */
+        .stats {
+            margin-top: 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--taupe);
+            border-top: 1px solid var(--sand);
+            padding-top: 1rem;
+        }
 
+        /* fade-in animation for rows (pure CSS) */
+        .todo-row {
+            animation: fadeSlide 0.3s ease-out;
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-message td {
+            text-align: center;
+            color: var(--taupe);
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        /* responsive */
+        @media (max-width: 650px) {
+            .container { padding: 1rem; }
+            .action-btn { padding: 0.3rem 0.6rem; font-size: 0.7rem; }
+            td, th { padding: 0.7rem 0.4rem; }
+        }
+    </style>
 </head>
 <body>
-
 <div class="container">
-    <h1>📝 Todo List</h1>
+    <div class="header-flex">
+        <h1>📝 Todo List</h1>
+        <!-- "New Task" link – works without JS, goes to backend add page -->
+        <a href="" class="btn-new">
+            + New Task
+        </a>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            <tr>
-                <td>1</td>
-                <td>Learn FastAPI</td>
-                <td>Complete CRUD Operations</td>
-                <td class="pending">Pending</td>
-                <td>
-                    <button class="btn edit">Edit</button>
-                    <button class="btn delete">Delete</button>
-                </td>
-            </tr>
-
-            <tr>
-                <td>2</td>
-                <td>Database Setup</td>
-                <td>Create SQLAlchemy Models</td>
-                <td class="completed">Completed</td>
-                <td>
-                    <button class="btn edit">Edit</button>
-                    <button class="btn delete">Delete</button>
-                </td>
-            </tr>
-
-            <tr>
-                <td>3</td>
-                <td>Frontend Design</td>
-                <td>Create Todo UI</td>
-                <td class="pending">Pending</td>
-                <td>
-                    <button class="btn edit">Edit</button>
-                    <button class="btn delete">Delete</button>
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
+    <div class="table-wrapper">
+        <table class="todo-table">
+            <thead>
+                <tr><th>ID</th><th>Title</th><th>Description</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% if todos %}
+                    {% for todo in todos %}
+                    <tr class="todo-row">
+                        <td>{{ loop.index }}</td>
+                        <td style="text-align:left; font-weight:500;">{{ todo.title }}</td>
+                        <td style="text-align:left; color: var(--taupe);">{{ todo.description|default('—') }}</td>
+                        <td>
+                            {% if todo.done %}
+                            <span class="status-badge status-completed">Completed</span>
+                            {% else %}
+                            <span class="status-badge status-pending">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="action-group">
+                                <!-- Edit link -->
+                                <a href="" class="action-btn btn-edit">Edit</a>
+                                
+                                <!-- Toggle status form (POST) – changes done flag -->
+                                <form method="POST" action="" class="inline-form">
+                                    <button type="submit" class="action-btn btn-toggle">Toggle</button>
+                                </form>
+                                
+                                <!-- Delete form (POST) -->
+                                <form method="POST" action="" class="inline-form" onsubmit="return confirm('Delete this task?');">
+                                    <button type="submit" class="action-btn btn-delete">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr class="empty-message">
+                        <td colspan="5">🍃 No tasks yet. Click "New Task" to add one. 🍃</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="stats">
+        <span></span>
+        <span>
+            {% set total = todos|length %}
+            {% set completed = todos|selectattr('done')|list|length %}
+            {{ total }} tasks · ✓ {{ completed }} completed
+        </span>
+    </div>
 </div>
 
+<!-- 
+    ============================================
+    BACKEND NOTES (for Flask example):
+    - Pass 'todos' list of dicts like [{"id":1, "title":"...", "description":"...", "done":False}]
+    - Routes needed: add_task (GET form + POST), edit_task (GET form + POST), toggle_task (POST), delete_task (POST)
+    - The template uses `url_for` – replace with your framework's syntax.
+    - No JavaScript required – all interactions are pure HTML forms and links.
+    ============================================
+-->
 </body>
 </html>
