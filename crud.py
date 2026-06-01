@@ -7,18 +7,18 @@ from typing import List
 
 router = APIRouter()
 class ToDoCreate(BaseModel):
-    name : str
+    title : str
     description : str
-    done = bool
+    done : bool
 
 class ToDoResponse(ToDoCreate):
     id : int
 
 todos = []
 
-@router.get('/')
-def show_todos():
-    return todos
+@router.get('/',response_model=List[ToDoResponse])
+def show_todos(db : Session = Depends(get_db)):
+    return db.query(ToDo).all()
 
 @router.post('/',response_model=ToDoResponse)
 def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
@@ -27,16 +27,16 @@ def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
     db.commit()
     return new_todo
 
-@router.put('/{todo_id}')
-def update_todos(todo_id:int , updated_todo : ToDoCreate):
-    for i , todo in enumerate(todos):
-        if todo.id == todo_id:
-            todos[i] = updated_todo
-            return {"message" : "todo updated sucessfully"}
-    return {"message" : "feild todo"}
+# @router.put('/{todo_id}')
+# def update_todos(todo_id:int , updated_todo : ToDoCreate):
+#     for i , todo in enumerate(todos):
+#         if todo.id == todo_id:
+#             todos[i] = updated_todo
+#             return {"message" : "todo updated sucessfully"}
+#     return {"message" : "feild todo"}
 
-@router.delete('/{todo_id}')
-def delete_todos(todo_id:int):
-    global todos
-    todos = [todo for todo in todos if todo.id != todo_id ]
-    return {"message" : " todo deleted"}
+# @router.delete('/{todo_id}')
+# def delete_todos(todo_id:int):
+#     global todos
+#     todos = [todo for todo in todos if todo.id != todo_id ]
+#     return {"message" : " todo deleted"}
