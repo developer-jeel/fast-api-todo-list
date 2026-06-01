@@ -30,10 +30,15 @@ def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
 
 @router.put('/{todo_id}',response_model=ToDoResponse)
 def update_todos(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
-    todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
+    db_todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
     if not todo:
         return HTTPException(status_code=404,detail="Todo not found")
-
+    
+    db_todo.title = todo.title
+    db_todo.description = todo.description
+    db_todo.done = todo.done
+    db.commit()
+    return db_todo
 
 # @router.delete('/{todo_id}')
 # def delete_todos(todo_id:int):
