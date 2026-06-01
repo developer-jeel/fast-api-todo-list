@@ -25,15 +25,10 @@ def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
     new_todo = ToDo(title = todo.title,description = todo.description,done = todo.done)
     db.add(new_todo)
     db.commit()
+    db.refresh(new_todo)
     return new_todo
 
-# @router.put('/{todo_id}')
-# def update_todos(todo_id:int , updated_todo : ToDoCreate):
-#     for i , todo in enumerate(todos):
-#         if todo.id == todo_id:
-#             todos[i] = updated_todo
-#             return {"message" : "todo updated sucessfully"}
-#     return {"message" : "feild todo"}
+
 
 # @router.delete('/{todo_id}')
 # def delete_todos(todo_id:int):
