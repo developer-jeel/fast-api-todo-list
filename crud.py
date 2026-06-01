@@ -2,11 +2,13 @@ from fastapi import APIRouter,Depends,HTTPException
 from pydantic import BaseModel
 
 router = APIRouter()
-class ToDo(BaseModel):
-    id : int
+class ToDoCreate(BaseModel):
     name : str
     description : str
     done = bool
+
+class ToDoResponse(ToDoCreate):
+    id : int
 
 todos = []
 
@@ -14,8 +16,8 @@ todos = []
 def show_todos():
     return todos
 
-@router.post('/')
-def create_todos(todo : ToDo):
+@router.post('/',response_model=ToDoResponse)
+def create_todos(todo : ToDoCreate):
     todos.append(todo)
     return {"message" : "todo created sucessfully"}
 
