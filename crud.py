@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from database import *
 from sqlalchemy.orm import Session
 from models import ToDo
-from typing import List
+from typing import List,Optional
 
 router = APIRouter()
 class ToDoCreate(BaseModel):
