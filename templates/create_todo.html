@@ -226,15 +226,15 @@
 <div class="container">
     <h2>Add New Todo</h2>
 
-    <form action="" method="post">
+    <form id="createForm" onsubmit="handleSubmit(event)">
         <div class="form-group">
             <label>📌 Title</label>
-            <input type="text" name="title" placeholder="Write a clear title..." required>
+            <input type="text" name="title" id="todoTitle" placeholder="Write a clear title..." required>
         </div>
 
         <div class="form-group">
             <label>📝 Description</label>
-            <textarea name="description" placeholder="Add details (optional)"></textarea>
+            <textarea name="description" id="todoDesc" placeholder="Add details (optional)"></textarea>
         </div>
 
         <div class="checkbox">
@@ -245,9 +245,37 @@
         <button type="submit" class="btn">Add Todo</button>
     </form>
 
-    <div class="back-link">
-        <a href="/">← Back to Todo List</a>
+    <!-- Success toast -->
+    <div id="toast" style="
+        position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+        background: var(--espresso); color: #FEF6E8; padding: 0.8rem 1.6rem;
+        border-radius: 60px; font-size: 0.9rem; font-weight: 500;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15); opacity: 0;
+        transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); pointer-events: none;
+        display: flex; align-items: center; gap: 8px; z-index: 100;
+    ">
+        ✅ Todo added (UI only — no backend)
     </div>
+
+    <div class="back-link">
+        <a href="/todo/">← Back to Todo List</a>
+    </div>
+
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('todoTitle').value;
+            const toast = document.getElementById('toast');
+            toast.textContent = '✅ "' + title + '" added (render only — no backend)';
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(100px)';
+            }, 2500);
+            document.getElementById('createForm').reset();
+        }
+    </script>
 </div>
 
 </body>

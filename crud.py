@@ -27,16 +27,16 @@ def show_todos(request : Request ,db : Session = Depends(get_db)):
     todos =  db.query(ToDo).all()
     return templates.TemplateResponse(request, name='todo_list.html', context={"todos":todos})
 
-@router.get('/create',response_model=ToDoResponse)
-def create_todos(request : Request):
-        return templates.TemplateResponse(request, name='create_todo.html',)
+@router.get('/create')
+def create_page(request : Request):
+        return templates.TemplateResponse(request,'create_todo.html')
     
 @router.post('/',response_model=ToDoResponse)
 def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
     new_todo = ToDo(title = todo.title,description = todo.description,done = todo.done)
     db.add(new_todo)
     db.commit()
-    db.refresh(new_todo)
+    db.refresh(new_todo )
     return new_todo
 
 @router.put('/{todo_id}',response_model=ToDoResponse)
