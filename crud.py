@@ -48,10 +48,10 @@ def update_todos(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
     return db_todo
 
 @router.delete('/{todo_id}')
-def delete_todos(todo_id:int,db : Session = Depends(get_db)):
+def delete_todos(request: Request,todo_id:int,db : Session = Depends(get_db)):
     db_todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
     if not db_todo:
         return HTTPException(status_code=404,detail="Todo not found")
     db.delete(db_todo)
     db.commit()
-    return {"message" : " todo deleted"}
+    return templates.TemplateResponse(request, name='todo_list.html', context={"todos":todos})
