@@ -48,17 +48,21 @@ def update_todos(request : Request ,todo_id:int,db : Session = Depends(get_db)):
         return HTTPException(status_code=404,detail="Todo not found")
     return templates.TemplateResponse(request, 'update.html', context={"request": request, "todo": todo})
 
-@router.put('/update/{todo_id}',response_model=ToDoResponse)
-def update_todo(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
+@router.post('/update/{todo_id}')
+def update_todo(todo_id:int,
+    title: str = Form(...),
+    description: str = Form(...),
+    done: bool = Form(False),
+    db : Session = Depends(get_db)):
     db_todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
     if not db_todo:
         return HTTPException(status_code=404,detail="Todo not found")
     
-    db_todo.title = todo.title
-    db_todo.description = todo.description
-    db_todo.done = todo.done
+    db_todo.title = title
+    db_todo.description = description
+    db_todo.done = done
     db.commit()
-    return db_todo
+    return RedirectResponse(url="/todo/", status_code=303)
 
 @router.get('/delete/{todo_id}')
 def delete_todos(request: Request,todo_id:int,db : Session = Depends(get_db)):
