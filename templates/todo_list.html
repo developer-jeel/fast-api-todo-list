@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earthy Todo — Jinja Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Elysian Tasks — Advanced Todo | Earthy UI</title>
     <style>
         * {
             margin: 0;
@@ -11,325 +11,644 @@
             box-sizing: border-box;
         }
 
-        /* ----- EARTHY THEME (exactly from your variables) ----- */
+        /* ========== ADVANCED EARTHY DESIGN SYSTEM ========== */
         :root {
-            --cream:    #F5F0E8;
-            --parchment:#EDE5D8;
-            --linen:    #E0D5C5;
-            --warm-mid: #C4B49A;
+            --cream:    #FCF8F0;
+            --parchment:#F2EBE1;
+            --linen:    #E9DFD1;
+            --warm-mid: #CBBFA8;
             --taupe:    #9E8E78;
             --umber:    #6B5B45;
             --espresso: #3D2E1E;
             --ink:      #1E1510;
-            --gold:     #B89A6A;
-            --gold-lt:  #D4B896;
-            --sand:     #D6C9B5;
-            --white:    #FAF7F2;
-            --done-bg:  rgba(95,110,85,0.12);
-            --done-txt: #4A5C3A;
-            --pend-bg:  rgba(160,120,60,0.12);
-            --pend-txt: #7A5A20;
-            --radius:   14px;
-            --radius-sm:8px;
-            --shadow: 0 10px 20px rgba(0,0,0,0.05);
-            --transition: all 0.2s ease-out;
+            --gold:     #C6A15B;
+            --gold-lt:  #E6CCA8;
+            --sand:     #DDD0BC;
+            --white:    #FFFFFF;
+            --done-bg:  rgba(85, 110, 70, 0.12);
+            --done-txt: #3A5C2E;
+            --pend-bg:  rgba(190, 140, 60, 0.12);
+            --pend-txt: #8B5E1C;
+            
+            --glass-bg: rgba(255, 252, 245, 0.68);
+            --glass-border: rgba(160, 130, 100, 0.25);
+            --shadow-sm: 0 12px 28px -8px rgba(0,0,0,0.08);
+            --shadow-md: 0 20px 32px -12px rgba(0,0,0,0.12);
+            --shadow-glow: 0 8px 20px rgba(185, 140, 70, 0.12);
+            --radius-card: 28px;
+            --radius-btn: 48px;
+            --transition-butter: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
         body {
-            background: linear-gradient(135deg, var(--cream), var(--parchment));
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: radial-gradient(circle at 10% 20%, rgba(245, 240, 232, 1) 0%, rgba(235, 225, 210, 1) 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'SF Pro Text', sans-serif;
+            padding: 2rem 1.5rem;
             min-height: 100vh;
-            padding: 2rem 1rem;
-            margin: 0;
+            position: relative;
+            backdrop-filter: blur(0px);
+        }
+
+        /* animated organic wave overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 70% 30%, rgba(200, 175, 135, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: softDrift 18s infinite alternate ease-in-out;
+        }
+
+        @keyframes softDrift {
+            0% { opacity: 0.3; transform: translateX(-2%) scale(1);}
+            100% { opacity: 0.6; transform: translateX(2%) scale(1.02);}
         }
 
         .container {
-            width: 100%;
-            max-width: 1280px;
-            background: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 1.8rem;
-            transition: var(--transition);
-            border: 1px solid rgba(180,150,110,0.2);
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(0px);
         }
 
-        /* header + new task link (styled as button) */
+        /* --- GLASSMORPHIC HEADER & STATS --- */
         .header-flex {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            padding: 1rem 2rem;
+            border-radius: 80px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-butter);
+        }
+
+        .header-flex:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--gold-lt);
         }
 
         h1 {
-            font-size: 1.9rem;
-            font-weight: 600;
-            color: var(--espresso);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        h1::before {
-            content: "";
             font-size: 2rem;
+            font-weight: 620;
+            background: linear-gradient(135deg, var(--espresso) 20%, #846B48 80%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h1::before {
+            font-size: 2.2rem;
+            background: none;
+            color: var(--umber);
+            animation: leafFloat 3s infinite alternate ease;
+        }
+
+        @keyframes leafFloat {
+            0% { transform: translateY(0px) rotate(0deg);}
+            100% { transform: translateY(-4px) rotate(2deg);}
         }
 
         .btn-new {
-            background: var(--espresso);
-            padding: 0.7rem 1.6rem;
-            border-radius: 60px;
-            font-weight: 500;
+            background: linear-gradient(105deg, var(--espresso), #5C4A33);
+            padding: 0.75rem 2rem;
+            border-radius: var(--radius-btn);
+            font-weight: 550;
             font-size: 0.95rem;
             color: var(--white);
             text-decoration: none;
-            transition: var(--transition);
+            transition: var(--transition-butter);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,235,200,0.3);
+            letter-spacing: 0.2px;
         }
+
         .btn-new:hover {
-            background: var(--umber);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
-        }
-        .btn-new:active {
-            transform: translateY(1px);
+            transform: translateY(-4px) scale(1.02);
+            background: linear-gradient(105deg, #2E2216, #6B5B45);
+            box-shadow: 0 16px 28px -8px rgba(60, 40, 20, 0.3);
+            gap: 16px;
         }
 
-        /* table styles */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: var(--radius);
+        /* --- MODERN CARD GRID (replaces table) --- */
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0 2rem;
         }
 
-        .todo-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
-        }
-
-        .todo-table th {
-            background: var(--linen);
-            color: var(--espresso);
-            font-weight: 600;
-            padding: 1rem;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .todo-table td {
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid var(--sand);
+        /* CARD ENTRY ANIMATION (staggered) */
+        .task-card {
             background: var(--white);
-            transition: background 0.2s;
-            vertical-align: middle;
-        }
-
-        /* row hover animation */
-        .todo-table tbody tr {
-            transition: transform 0.1s, background 0.2s;
-        }
-        .todo-table tbody tr:hover td {
-            background: var(--parchment);
-        }
-
-        /* status badges */
-        .status-badge {
-            display: inline-block;
-            padding: 0.3rem 0.9rem;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-        .status-completed {
-            background: var(--done-bg);
-            color: var(--done-txt);
-            border-left: 2px solid #5F6E55;
-        }
-        .status-pending {
-            background: var(--pend-bg);
-            color: var(--pend-txt);
-            border-left: 2px solid #C2A156;
-        }
-
-        /* action buttons / links styled as buttons */
-        .action-group {
+            border-radius: var(--radius-card);
+            backdrop-filter: blur(0px);
+            border: 1px solid rgba(210, 185, 150, 0.4);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-butter);
+            overflow: hidden;
+            position: relative;
             display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 0.4rem 0.9rem;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid transparent;
-        }
-        .btn-edit {
-            background: rgba(184,154,106,0.15);
-            color: var(--umber);
-            border-color: var(--gold-lt);
-        }
-        .btn-edit:hover {
-            background: var(--gold);
-            color: white;
-            transform: translateY(-2px);
-        }
-        .btn-toggle {
-            background: rgba(107,91,69,0.1);
-            color: var(--taupe);
-            border-color: var(--warm-mid);
-        }
-        .btn-toggle:hover {
-            background: var(--warm-mid);
-            color: var(--ink);
-            transform: translateY(-2px);
-        }
-        .btn-delete {
-            background: rgba(200,80,60,0.08);
-            color: #b1624b;
-            border-color: #e2bcb0;
-        }
-        .btn-delete:hover {
-            background: #dc7f64;
-            color: white;
-            transform: translateY(-2px);
+            flex-direction: column;
+            animation: cardGlideUp 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1) backwards;
         }
 
-        /* inline delete form */
-        .inline-form {
-            display: inline;
-        }
-        .inline-form button {
-            background: none;
-            border: none;
-            font-family: inherit;
-            cursor: pointer;
-        }
-
-        /* stats footer */
-        .stats {
-            margin-top: 1.8rem;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: var(--taupe);
-            border-top: 1px solid var(--sand);
-            padding-top: 1rem;
-        }
-
-        /* fade-in animation for rows (pure CSS) */
-        .todo-row {
-            animation: fadeSlide 0.3s ease-out;
-        }
-        @keyframes fadeSlide {
+        @keyframes cardGlideUp {
             from {
                 opacity: 0;
-                transform: translateY(8px);
+                transform: translateY(32px) scale(0.96);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
-        .empty-message td {
-            text-align: center;
-            color: var(--taupe);
-            font-style: italic;
-            padding: 2rem;
+        /* stagger animation via nth-child delay */
+        .task-card:nth-child(1) { animation-delay: 0s; }
+        .task-card:nth-child(2) { animation-delay: 0.05s; }
+        .task-card:nth-child(3) { animation-delay: 0.1s; }
+        .task-card:nth-child(4) { animation-delay: 0.15s; }
+        .task-card:nth-child(5) { animation-delay: 0.2s; }
+        .task-card:nth-child(6) { animation-delay: 0.25s; }
+
+        .task-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: var(--shadow-md), 0 12px 24px -12px rgba(80, 55, 30, 0.25);
+            border-color: var(--gold);
         }
 
-        /* responsive */
-        @media (max-width: 650px) {
-            .container { padding: 1rem; }
-            .action-btn { padding: 0.3rem 0.6rem; font-size: 0.7rem; }
-            td, th { padding: 0.7rem 0.4rem; }
+        /* dynamic border accent based on status */
+        .task-card.completed-task {
+            border-left: 5px solid #8CA86E;
+            background: linear-gradient(120deg, #FFFFFF, #FEFAF4);
+        }
+        .task-card.pending-task {
+            border-left: 5px solid var(--gold);
+        }
+
+        /* card content */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem 0.5rem 1.5rem;
+        }
+
+        .task-id-badge {
+            background: var(--linen);
+            padding: 0.25rem 0.9rem;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--umber);
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(2px);
+        }
+
+        .status-badge-modern {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.35rem 1rem;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: var(--transition-butter);
+            backdrop-filter: blur(2px);
+        }
+
+        .status-completed-modern {
+            background: var(--done-bg);
+            color: var(--done-txt);
+            box-shadow: inset 0 0 0 1px rgba(95, 110, 85, 0.2);
+        }
+        .status-pending-modern {
+            background: var(--pend-bg);
+            color: var(--pend-txt);
+            box-shadow: inset 0 0 0 1px rgba(194, 161, 86, 0.3);
+            animation: subtlePulse 2s infinite;
+        }
+
+        @keyframes subtlePulse {
+            0% { box-shadow: inset 0 0 0 1px rgba(194, 161, 86, 0.2), 0 0 0 0 rgba(194, 161, 86, 0);}
+            70% { box-shadow: inset 0 0 0 1px rgba(194, 161, 86, 0.5), 0 0 0 4px rgba(194, 161, 86, 0);}
+            100% { box-shadow: inset 0 0 0 1px rgba(194, 161, 86, 0.2), 0 0 0 0 rgba(194, 161, 86, 0);}
+        }
+
+        .task-title {
+            font-size: 1.32rem;
+            font-weight: 620;
+            color: var(--espresso);
+            padding: 0 1.5rem;
+            margin: 0.4rem 0 0.2rem;
+            letter-spacing: -0.2px;
+            transition: var(--transition-butter);
+        }
+
+        .completed-task .task-title {
+            text-decoration: line-through;
+            text-decoration-thickness: 2px;
+            text-decoration-color: #9E8E78;
+            color: #7A6A55;
+        }
+
+        .task-description {
+            padding: 0 1.5rem;
+            color: var(--taupe);
+            font-size: 0.9rem;
+            line-height: 1.45;
+            margin: 0.25rem 0 1rem;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .completed-task .task-description {
+            text-decoration: line-through;
+            text-decoration-thickness: 1px;
+            color: #B0A088;
+        }
+
+        /* Action Buttons : premium feel */
+        .action-group-modern {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 1rem 1.5rem 1.5rem;
+            border-top: 1px solid rgba(200, 175, 140, 0.2);
+            margin-top: 0.5rem;
+            background: rgba(250, 245, 235, 0.4);
+        }
+
+        .action-btn-modern {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.55rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            font-weight: 550;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 1px solid transparent;
+            backdrop-filter: blur(4px);
+            background: rgba(245, 238, 225, 0.9);
+            color: var(--umber);
+        }
+
+        .btn-edit-modern {
+            background: rgba(200, 175, 130, 0.2);
+            border-color: var(--gold-lt);
+        }
+        .btn-edit-modern:hover {
+            background: var(--gold);
+            color: white;
+            transform: translateY(-2px);
+            border-color: transparent;
+            box-shadow: 0 6px 14px rgba(184, 140, 70, 0.25);
+        }
+
+        .btn-toggle-modern {
+            background: rgba(100, 120, 80, 0.12);
+            border-color: #B9C4A5;
+        }
+        .btn-toggle-modern:hover {
+            background: #8DA074;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete-modern {
+            background: rgba(190, 100, 70, 0.1);
+            border-color: #E2B8A8;
+        }
+        .btn-delete-modern:hover {
+            background: #CA8268;
+            color: white;
+            transform: translateY(-2px);
+            border-color: transparent;
+        }
+
+        .inline-form-modern {
+            display: inline-block;
+        }
+
+        /* empty state */
+        .empty-modern {
+            text-align: center;
+            background: rgba(255, 250, 240, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 56px;
+            padding: 3rem;
+            color: var(--taupe);
+            font-size: 1.2rem;
+            border: 1px dashed var(--gold);
+            animation: fadeGlow 2s infinite alternate;
+        }
+
+        @keyframes fadeGlow {
+            0% { border-color: var(--gold-lt); box-shadow: 0 0 0px rgba(200, 165, 100, 0.2);}
+            100% { border-color: var(--gold); box-shadow: 0 0 12px rgba(200, 165, 100, 0.3);}
+        }
+
+        /* progress bar + stats */
+        .stats-advanced {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 64px;
+            padding: 0.9rem 1.8rem;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stats-text {
+            font-weight: 500;
+            color: var(--umber);
+            font-size: 0.85rem;
+            display: flex;
+            gap: 20px;
+        }
+
+        .progress-wrapper {
+            flex: 1;
+            max-width: 280px;
+        }
+
+        .progress-bar-bg {
+            background: var(--sand);
+            border-radius: 40px;
+            height: 8px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--gold), #C2A86B);
+            width: 0%;
+            height: 100%;
+            border-radius: 40px;
+            transition: width 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            position: relative;
+            animation: shimmer 2s infinite alternate;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0.9; filter: brightness(1);}
+            100% { opacity: 1; filter: brightness(1.08);}
+        }
+
+        /* confirm delete alert styled (inline JS for better UX) */
+        .task-card {
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        button.action-btn-modern {
+            background: none;
+            border: 1px solid;
+            font-family: inherit;
+        }
+
+        /* responsive adjustments */
+        @media (max-width: 680px) {
+            body { padding: 1rem; }
+            .header-flex { flex-direction: column; align-items: stretch; border-radius: 32px; text-align: center; }
+            .tasks-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+            .action-group-modern { justify-content: center; }
+        }
+
+        /* ID chip small enhancement */
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* smooth focus ring */
+        .action-btn-modern:focus-visible, .btn-new:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header-flex">
-        <h1>📝 Todo List</h1>
-        <!-- "New Task" link – works without JS, goes to backend add page -->
+        <h1>Task</h1>
         <a href="/todo/create" class="btn-new">
-            + New Task
+            ✦  new intention ✦
         </a>
     </div>
 
-    <div class="table-wrapper">
-        <table class="todo-table">
-            <thead>
-                <tr><th>ID</th><th>Title</th><th>Description</th><th>Status</th><th>Actions</th></tr>
-            </thead>
-            <tbody>
-                {% if todos %}
-                    {% for todo in todos %}
-                    <tr class="todo-row">
-                        <td>{{ loop.index }}</td>
-                        <td style="text-align:left; font-weight:500;">{{ todo.title }}</td>
-                        <td style="text-align:left; color: var(--taupe);">{{ todo.description|default('—') }}</td>
-                        <td>
-                            {% if todo.done %}
-                            <span class="status-badge status-completed">Completed</span>
-                            {% else %}
-                            <span class="status-badge status-pending">Pending</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="action-group">
-                                <!-- Edit link -->
-                                <a href="/todo/update/{{todo.id}}" class="action-btn btn-edit">Edit</a>
-                                                            
-                                <!-- Delete form (POST) -->
-                                <a href="/todo/delete/{{todo.id}}"  type="submit" class="action-btn btn-delete">Delete</a>
-                            </div>
-                        </td>
-                    </tr>s
-                    {% endfor %}
-                {% else %}
-                    <tr class="empty-message">
-                        <td colspan="5"> No tasks yet. Click "New Task" to add one. </td>
-                    </tr>
-                {% endif %}
-            </tbody>
-        </table>
+    <!-- CARD BASED GRID - ADVANCED UI -->
+    <div class="tasks-grid">
+        {% if todos %}
+            {% for todo in todos %}
+            {% set card_status_class = "completed-task" if todo.done else "pending-task" %}
+            <div class="task-card {{ card_status_class }}" data-id="{{ todo.id }}">
+                <div class="card-header">
+                    <div class="task-id-badge meta-chip">
+                        <span>#{{ loop.index }}</span>
+                    </div>
+                    <div>
+                        {% if todo.done %}
+                        <span class="status-badge-modern status-completed-modern">
+                            ✓ completed
+                        </span>
+                        {% else %}
+                        <span class="status-badge-modern status-pending-modern">
+                            ○ awaiting
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="task-title">
+                    {{ todo.title }}
+                </div>
+                <div class="task-description">
+                    {{ todo.description|default('— no additional notes —') }}
+                </div>
+                <div class="action-group-modern">
+                    <!-- EDIT LINK -->
+                    <a href="/todo/update/{{ todo.id }}" class="action-btn-modern btn-edit-modern">
+                        ✎ edit
+                    </a>
+
+                    <!-- TOGGLE STATUS (complete/pending) - advanced feature using POST form -->
+                    <form action="/todo/toggle/{{ todo.id }}" method="POST" class="inline-form-modern">
+                        {% if todo.done %}
+                        <button type="submit" class="action-btn-modern btn-toggle-modern" style="background: rgba(70, 80, 55, 0.1);">
+                            ↻ set pending
+                        </button>
+                        {% else %}
+                        <button type="submit" class="action-btn-modern btn-toggle-modern">
+                            ✓ mark done
+                        </button>
+                        {% endif %}
+                    </form>
+
+                    <!-- DELETE with confirm (advanced UX but preserves GET route, adds confirm dialog) -->
+                    <a href="/todo/delete/{{ todo.id }}" class="action-btn-modern btn-delete-modern" 
+                       onclick="return confirm('⟡ Permanently remove this task? ⟡');">
+                        🗑 delete
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-modern">
+                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🍃</span>
+                <strong>no tasks yet</strong><br>
+                breathe in, click "new intention" and begin
+            </div>
+        {% endif %}
     </div>
-    <div class="stats">
-        <span></span>
-        <span>
+
+    <!-- ADVANCED STATS + PROGRESS ANIMATION -->
+    <div class="stats-advanced">
+        <div class="stats-text">
             {% set total = todos|length %}
             {% set completed = todos|selectattr('done')|list|length %}
-            {{ total }} tasks · ✓ {{ completed }} completed
-        </span>
+            <span> {{ total }} total tasks</span>
+            <span>✓ {{ completed }} finished</span>
+        </div>
+        <div class="progress-wrapper">
+            <div class="progress-bar-bg">
+                {% set percent = (completed / total * 100) if total > 0 else 0 %}
+                <div class="progress-fill" style="width: {{ percent }}%;"></div>
+            </div>
+        </div>
+        <div class="stats-text">
+            {{ "%.0f"|format(percent) }}% complete
+        </div>
     </div>
 </div>
 
-<!-- 
-    ============================================
-    BACKEND NOTES (for Flask example):
-    - Pass 'todos' list of dicts like [{"id":1, "title":"...", "description":"...", "done":False}]
-    - Routes needed: add_task (GET form + POST), edit_task (GET form + POST), toggle_task (POST), delete_task (POST)
-    - The template uses `url_for` – replace with your framework's syntax.
-    - No JavaScript required – all interactions are pure HTML forms and links.
-    ============================================
--->
+<!-- subtle interactive ripple effect for buttons (no backend, just surface effect) -->
+<script>
+    (function() {
+        // purely cosmetic micro-interactions: animated ripple on buttons (doesn't affect logic)
+        const btns = document.querySelectorAll('.action-btn-modern, .btn-new');
+        btns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (btn.classList.contains('btn-delete-modern')) return; // let confirm handle
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple-effect';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.backgroundColor = 'rgba(255,245,210,0.5)';
+                ripple.style.pointerEvents = 'none';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.transition = 'transform 0.4s ease-out, opacity 0.5s';
+                ripple.style.opacity = '1';
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+                btn.style.position = 'relative';
+                btn.style.overflow = 'hidden';
+                btn.appendChild(ripple);
+                setTimeout(() => {
+                    ripple.style.transform = 'scale(3)';
+                    ripple.style.opacity = '0';
+                }, 20);
+                setTimeout(() => ripple.remove(), 500);
+            });
+        });
+        // subtle scroll reveal for cards (already animated via css, but just to re-trigger?)
+        // additional: watch progress fill animation when visible
+        const progressFill = document.querySelector('.progress-fill');
+        if (progressFill) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const width = entry.target.style.width;
+                        entry.target.style.transition = 'width 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.2)';
+                        // force reflow for extra smoothness
+                        void entry.target.offsetWidth;
+                        entry.target.style.width = width;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            observer.observe(progressFill);
+        }
+    })();
+</script>
+<style>
+    /* additional micro-animation and glass styles */
+    .task-card {
+        transition: transform 0.3s ease, box-shadow 0.3s, border-color 0.2s;
+    }
+    .task-card:hover .task-title {
+        color: var(--espresso);
+        letter-spacing: -0.2px;
+    }
+    .inline-form-modern button {
+        cursor: pointer;
+    }
+    .action-btn-modern {
+        backdrop-filter: blur(4px);
+        transition: all 0.2s cubic-bezier(0.2, 0.9, 0.6, 1.1);
+    }
+    .progress-fill {
+        background: linear-gradient(90deg, #CFB281, #AA8C58);
+        box-shadow: 0 0 6px rgba(200, 165, 80, 0.6);
+    }
+    /* custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: var(--parchment);
+        border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--warm-mid);
+        border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--taupe);
+    }
+    .empty-modern {
+        grid-column: 1 / -1;
+        text-align: center;
+        background: rgba(250, 245, 235, 0.85);
+        backdrop-filter: blur(12px);
+    }
+    /* card accessibility */
+    .task-card:focus-within {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+    }
+    /* ensure completed card subtle pattern */
+    .completed-task {
+        background: linear-gradient(115deg, #FEFCF7, #FBF5EA);
+    }
+</style>
 </body>
 </html>
