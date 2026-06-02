@@ -22,22 +22,38 @@ class ToDoResponse(ToDoCreate):
 
 todos = []
 
-@router.get('/',response_model=List[ToDoResponse])
-def show_todos(request : Request ,db : Session = Depends(get_db)):
-    todos =  db.query(ToDo).all()
-    return templates.TemplateResponse(request, name='todo_list.html', context={"todos":todos})
+@router.get('/')
+def show_todos(request : Request, db : Session = Depends(get_db)):
+    todos = db.query(ToDo).all()
+    return templates.TemplateResponse(request, name='todo_list.html', context={"request": request, "todos": todos})
 
 @router.get('/create')
 def create_page(request : Request):
-        return templates.TemplateResponse(request,'create_todo.html')
+    return templates.TemplateResponse(request, 'create_todo.html', context={"request": request})
     
-@router.post('/',response_model=ToDoResponse)
-def create_todos(todo : ToDoCreate,db : Session = Depends(get_db)):
-    new_todo = ToDo(title = todo.title,description = todo.description,done = todo.done)
+@router.post('/create')
+def create_todos(
+    title: str = Form(...),
+    description: str = Form(...),
+    done: bool = Form(False),
+    db: Session = Depends(get_db)):
+    new_todo = ToDo(title=title, description=description, done=done)
     db.add(new_todo)
     db.commit()
-    db.refresh(new_todo )
-    return new_todo
+    db.refresh(new_todo)
+    return RedirectResponse(url='/todo/', status_code=303)
+
+@router.get('/{todo_id}')
+def update_todos(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
+    db_todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
+    if not db_todo:
+        return HTTPException(status_code=404,detail="Todo not found")
+    
+    db_todo.title = todo.title
+    db_todo.description = todo.description
+    db_todo.done = todo.done
+    db.commit()
+    return db_todo
 
 @router.put('/{todo_id}',response_model=ToDoResponse)
 def update_todos(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
