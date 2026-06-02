@@ -304,16 +304,14 @@
                                 </form>
                                 
                                 <!-- Delete form (POST) -->
-                                <form method="POST" action="" class="inline-form" onsubmit="return confirm('Delete this task?');">
-                                    <button type="submit" class="action-btn btn-delete">Delete</button>
-                                </form>
+                                <a href="/todo/delete/{{todo.id}}"  type="submit" class="action-btn btn-delete">Delete</a>
                             </div>
                         </td>
-                    </tr>
+                    </tr>s
                     {% endfor %}
                 {% else %}
                     <tr class="empty-message">
-                        <td colspan="5">🍃 No tasks yet. Click "New Task" to add one. 🍃</td>
+                        <td colspan="5"> No tasks yet. Click "New Task" to add one. </td>
                     </tr>
                 {% endif %}
             </tbody>
