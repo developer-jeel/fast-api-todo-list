@@ -20,8 +20,6 @@ class ToDoCreate(BaseModel):
 class ToDoResponse(ToDoCreate):
     id : int
 
-todos = []
-
 @router.get('/')
 def show_todos(request : Request, db : Session = Depends(get_db)):
     todos = db.query(ToDo).all()
@@ -43,20 +41,15 @@ def create_todos(
     db.refresh(new_todo)
     return RedirectResponse(url='/todo/', status_code=303)
 
-@router.get('/{todo_id}')
-def update_todos(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
-    db_todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
-    if not db_todo:
+@router.get('/update/{todo_id}')
+def update_todos(request : Request ,todo_id:int,db : Session = Depends(get_db)):
+    todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
+    if not todo:
         return HTTPException(status_code=404,detail="Todo not found")
-    
-    db_todo.title = todo.title
-    db_todo.description = todo.description
-    db_todo.done = todo.done
-    db.commit()
-    return db_todo
+    return templates.TemplateResponse(request, 'update.html', context={"request": request, "todo": todo})
 
-@router.put('/{todo_id}',response_model=ToDoResponse)
-def update_todos(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
+@router.put('/update/{todo_id}',response_model=ToDoResponse)
+def update_todo(todo_id:int,todo : ToDoCreate ,db : Session = Depends(get_db)):
     db_todo = db.query(ToDo).filter(ToDo.id == todo_id).first()
     if not db_todo:
         return HTTPException(status_code=404,detail="Todo not found")

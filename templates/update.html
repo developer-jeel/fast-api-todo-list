@@ -229,16 +229,20 @@
     <form id="createForm" method="post" action="/todo/update/{{todo.id}}">
         <div class="form-group">
             <label>📌 Title</label>
-            <input type="text" name="title" id="todoTitle" placeholder="Write a clear title..." required>
+            <input type="text" name="title" id="todoTitle" value="{{todo.title}}" placeholder="Write a clear title..." required>
         </div>
 
         <div class="form-group">
             <label>📝 Description</label>       
-            <textarea name="description" id="todoDesc" placeholder="Add details (optional)"></textarea>
+            <textarea name="description" id="todoDesc" placeholder="Add details (optional)">{{todo.description}}</textarea>
         </div>
 
         <div class="checkbox">
+            {% if todo.done %}
+            <input type="checkbox" name="done" id="doneCheck" checked>
+            {% else %}
             <input type="checkbox" name="done" id="doneCheck">
+            {% endif %}
             <label for="doneCheck">✓ Mark as completed</label>
         </div>
 
